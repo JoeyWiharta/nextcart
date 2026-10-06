@@ -5,34 +5,34 @@ import { Star } from "lucide-react";
 import type { Product } from "@/lib/products";
 
 export default function ProductCard({ product }: { product: Product }) {
-const [isFavorite, setIsFavorite] = useState(false);
-const [hydrated, setHydrated] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
-useEffect(() => {
-  const favorites: number[] = JSON.parse(
-    localStorage.getItem("favorites") || "[]"
-  );
-  setIsFavorite(favorites.includes(product.id));
-  setHydrated(true);
-}, [product.id]);
+  useEffect(() => {
+    const favorites: number[] = JSON.parse(
+      localStorage.getItem("favorites") || "[]"
+    );
+    setIsFavorite(favorites.includes(product.id));
+    setIsReady(true);
+  }, [product.id]);
 
-useEffect(() => {
-  if (!hydrated) return;
-  const favorites: number[] = JSON.parse(
-    localStorage.getItem("favorites") || "[]"
-  );
-  if (isFavorite && !favorites.includes(product.id)) {
-    localStorage.setItem(
-      "favorites",
-      JSON.stringify([...favorites, product.id])
+  useEffect(() => {
+    if (!isReady) return;
+    const favorites: number[] = JSON.parse(
+      localStorage.getItem("favorites") || "[]"
     );
-  } else if (!isFavorite && favorites.includes(product.id)) {
-    localStorage.setItem(
-      "favorites",
-      JSON.stringify(favorites.filter((id) => id !== product.id))
-    );
-  }
-}, [isFavorite, product.id, hydrated]);
+    if (isFavorite && !favorites.includes(product.id)) {
+      localStorage.setItem(
+        "favorites",
+        JSON.stringify([...favorites, product.id])
+      );
+    } else if (!isFavorite && favorites.includes(product.id)) {
+      localStorage.setItem(
+        "favorites",
+        JSON.stringify(favorites.filter((id) => id !== product.id))
+      );
+    }
+  }, [isFavorite, product.id, isReady]);
 
   return (
     <div className="group bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden flex flex-col hover:border-neutral-700 hover:shadow-lg hover:shadow-black/40 transition-all duration-300">

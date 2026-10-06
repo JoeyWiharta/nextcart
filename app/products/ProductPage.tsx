@@ -7,10 +7,7 @@ import EmptyState from "../components/productComponent/EmptyState";
 
 export default function ProductPage({ products }: { products: Product[] }) {
   const [searchValue, setSearchValue] = useState("");
-
-  const filtered = products.filter((p) =>
-    p.title.toLowerCase().includes(searchValue.toLowerCase())
-  );
+  const filtered = products.filter((p) => p.title.toLowerCase().includes(searchValue.toLowerCase()));
 
   return (
     <main className="max-w-[1920px] mx-auto p-6 w-full flex-1 flex flex-col">
@@ -18,7 +15,6 @@ export default function ProductPage({ products }: { products: Product[] }) {
         searchValue={searchValue}
         onSearchChange={setSearchValue}
       />
-
       {filtered.length === 0 ? (
         <div className="flex-1 flex items-center justify-center">
           <EmptyState />

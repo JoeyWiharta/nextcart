@@ -7,10 +7,10 @@ export default function EmptyState() {
                 <PackageSearch size={48} className="text-neutral-500" />
             </div>
             <h3 className="text-lg font-semibold text-neutral-200 mb-1">
-                Produk tidak ditemukan
+                No products found
             </h3>
             <p className="text-sm text-neutral-500">
-                Coba kata kunci lain atau periksa ejaan pencarianmu.
+                Try a different keyword or check your spelling.
             </p>
         </div>
     );
