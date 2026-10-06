@@ -4,17 +4,19 @@ import type { Product } from "@/lib/products";
 import ProductCard from "./ProductCard";
 import ProductHeader from "./ProductHeader";
 import EmptyState from "./EmptyState";
+import PageContainer from "../layoutComponent/PageContainer";
 
 export default function ProductPage({ products }: { products: Product[] }) {
   const [searchValue, setSearchValue] = useState("");
   const filtered = products.filter((p) => p.title.toLowerCase().includes(searchValue.toLowerCase()));
 
   return (
-    <main className="max-w-[1920px] mx-auto p-6 w-full flex-1 flex flex-col">
+    <PageContainer>
       <ProductHeader
         searchValue={searchValue}
         onSearchChange={setSearchValue}
       />
+
       {filtered.length === 0 ? (
         <div className="flex-1 flex items-center justify-center">
           <EmptyState />
@@ -26,6 +28,6 @@ export default function ProductPage({ products }: { products: Product[] }) {
           ))}
         </div>
       )}
-    </main>
+    </PageContainer>
   );
 }
