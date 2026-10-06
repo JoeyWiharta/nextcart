@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
 import type { Product } from "@/lib/products";
-import ProductCard from "../components/productComponent/ProductCard";
-import ProductHeader from "../components/productComponent/ProductHeader";
-import EmptyState from "../components/productComponent/EmptyState";
+import ProductCard from "./ProductCard";
+import ProductHeader from "./ProductHeader";
+import EmptyState from "./EmptyState";
 
 export default function ProductPage({ products }: { products: Product[] }) {
   const [searchValue, setSearchValue] = useState("");

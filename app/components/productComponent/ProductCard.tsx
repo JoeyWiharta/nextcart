@@ -1,11 +1,16 @@
 "use client";
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { Star } from "lucide-react";
-import type { Product } from "@/lib/products";
 
-export default function ProductCard({ product }: { product: Product }) {
-  const [isReady, setIsReady] = useState(false);
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { ArrowRight, Star } from "lucide-react";
+import type { Product } from "@/lib/products";
+import { toast } from "sonner";
+
+interface ProductCardProps {
+  product: Product;
+}
+
+export default function ProductCard({ product }: ProductCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
@@ -13,26 +18,27 @@ export default function ProductCard({ product }: { product: Product }) {
       localStorage.getItem("favorites") || "[]"
     );
     setIsFavorite(favorites.includes(product.id));
-    setIsReady(true);
   }, [product.id]);
 
-  useEffect(() => {
-    if (!isReady) return;
+  const handleFavorite = () => {
     const favorites: number[] = JSON.parse(
       localStorage.getItem("favorites") || "[]"
     );
-    if (isFavorite && !favorites.includes(product.id)) {
-      localStorage.setItem(
-        "favorites",
-        JSON.stringify([...favorites, product.id])
+
+    if (favorites.includes(product.id)) {
+      const updatedFavorites = favorites.filter(
+        (id) => id !== product.id
       );
-    } else if (!isFavorite && favorites.includes(product.id)) {
-      localStorage.setItem(
-        "favorites",
-        JSON.stringify(favorites.filter((id) => id !== product.id))
-      );
+      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+      setIsFavorite(false);
+      toast.success("Removed from favorites");
+    } else {
+      const updatedFavorites = [...favorites, product.id];
+      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+      setIsFavorite(true);
+      toast.success("Added to favorites");
     }
-  }, [isFavorite, product.id, isReady]);
+  };
 
   return (
     <div className="group bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden flex flex-col hover:border-neutral-700 hover:shadow-lg hover:shadow-black/40 transition-all duration-300">
@@ -42,8 +48,9 @@ export default function ProductCard({ product }: { product: Product }) {
           alt={product.title}
           className="h-60 w-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
+
         <button
-          onClick={() => setIsFavorite(!isFavorite)}
+          onClick={handleFavorite}
           aria-label="Toggle favorite"
           className="absolute top-3 right-3 bg-neutral-950/70 backdrop-blur-sm border border-neutral-800 w-9 h-9 flex items-center justify-center rounded-full hover:bg-neutral-900 transition-colors"
         >
@@ -59,14 +66,16 @@ export default function ProductCard({ product }: { product: Product }) {
       </div>
 
       <div className="p-4 flex flex-col flex-1">
-        <h2 className="font-semibold text-sm mb-4 line-clamp-2 text-neutral-200">
+        <h2 className="font-semibold text-base mb-4 line-clamp-2 text-neutral-200">
           {product.title}
         </h2>
+
         <Link
           href={`/products/${product.id}`}
-          className="mt-auto bg-neutral-800 border border-neutral-700 text-white text-center py-2 rounded-md hover:bg-neutral-700 transition-colors text-sm font-medium"
+          className="mt-auto w-full border border-neutral-700 text-neutral-300 flex items-center justify-center gap-2 py-2 rounded-md hover:border-sky-400 hover:text-sky-400 transition-colors duration-300 text-sm font-semibold"
         >
-          View Details
+          Detail Product
+          <ArrowRight size={16} />
         </Link>
       </div>
     </div>

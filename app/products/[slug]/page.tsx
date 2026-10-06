@@ -1,5 +1,5 @@
 import { getProductById } from "@/lib/products";
-import FavoriteButton from "@/app/components/productComponent/FavoriteButton";
+import ProductActions from "@/app/components/productComponent/ProductAction";
 
 export default async function ProductDetail({
     params,
@@ -33,7 +33,7 @@ export default async function ProductDetail({
                     <p className="text-sm text-neutral-400 mb-6">
                         ⭐ {product.rating?.rate} ({product.rating?.count} reviews)
                     </p>
-                    <FavoriteButton productId={product.id} />
+                    <ProductActions productId={product.id} />
                 </div>
             </div>
         </main>
