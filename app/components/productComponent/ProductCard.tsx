@@ -26,9 +26,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     );
 
     if (favorites.includes(product.id)) {
-      const updatedFavorites = favorites.filter(
-        (id) => id !== product.id
-      );
+      const updatedFavorites = favorites.filter((id) => id !== product.id);
       localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
       setIsFavorite(false);
       toast.success("Removed from favorites");
@@ -42,11 +40,11 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <div className="group bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden flex flex-col hover:border-neutral-700 hover:shadow-lg hover:shadow-black/40 transition-all duration-300">
-      <div className="relative overflow-hidden">
+      <div className="relative aspect-square overflow-hidden bg-neutral-950/50 p-6">
         <img
           src={product.image}
           alt={product.title}
-          className="h-60 w-full object-cover group-hover:scale-105 transition-transform duration-300"
+          className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-300"
         />
 
         <button

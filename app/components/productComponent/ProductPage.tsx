@@ -11,7 +11,7 @@ export default function ProductPage({ products }: { products: Product[] }) {
   const filtered = products.filter((p) => p.title.toLowerCase().includes(searchValue.toLowerCase()));
 
   return (
-    <PageContainer>
+    <PageContainer className="flex flex-col">
       <ProductHeader
         searchValue={searchValue}
         onSearchChange={setSearchValue}
