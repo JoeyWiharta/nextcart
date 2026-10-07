@@ -1,27 +1,53 @@
+"use client";
 import Link from "next/link";
 import { ArrowLeft, Star } from "lucide-react";
-
-import { getProductById } from "@/lib/products";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { getProductById, Product } from "@/lib/products";
 import FavoriteButton from "@/app/components/productComponent/FavoriteButton";
 import PageContainer from "@/app/components/layoutComponent/PageContainer";
 
-interface ProductDetailProps {
-    params: Promise<{
-        slug: string;
-    }>;
-}
+export default function ProductDetail() {
+    const params = useParams();
+    const slug = params.slug as string;
 
-export default async function ProductDetail({ params }: ProductDetailProps) {
-    const { slug } = await params;
-    const product = await getProductById(slug);
+    const [product, setProduct] = useState<Product | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchProduct() {
+            try {
+                const data = await getProductById(slug);
+                setProduct(data);
+            } catch (error) {
+                console.error("Failed to fetch product:", error);
+                setProduct(null);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchProduct();
+    }, [slug]);
+
+    if (loading) {
+        return (
+            <PageContainer>
+                <div className="py-24 text-center">
+                    <p className="text-neutral-400">Loading product...</p>
+                </div>
+            </PageContainer>
+        );
+    }
 
     if (!product) {
         return (
             <PageContainer>
                 <div className="py-24 text-center">
-                    <p className="text-neutral-400 mb-6">
+                    <p className="mb-6 text-neutral-400">
                         Product not found or failed to load.
                     </p>
+
                     <Link
                         href="/"
                         className="inline-flex items-center gap-2 rounded-full border border-neutral-800 py-2 pl-3 pr-4 text-sm text-neutral-400 transition-colors duration-300 hover:border-neutral-700 hover:text-sky-400"
@@ -80,41 +106,55 @@ export default async function ProductDetail({ params }: ProductDetailProps) {
 
                             <div className="mb-4 flex items-center gap-8 border-y border-neutral-800 py-5">
                                 <div>
-                                    <p className="mb-2 text-xs text-neutral-500">Rating</p>
+                                    <p className="mb-2 text-xs text-neutral-500">
+                                        Rating
+                                    </p>
+
                                     <div className="flex items-center gap-2">
                                         <div className="relative flex">
                                             <div className="flex text-neutral-700">
-                                                {Array.from({ length: 5 }).map((_, index) => (
-                                                    <Star
-                                                        key={index}
-                                                        size={16}
-                                                        className="fill-neutral-800"
-                                                    />
-                                                ))}
+                                                {Array.from({ length: 5 }).map(
+                                                    (_, index) => (
+                                                        <Star
+                                                            key={index}
+                                                            size={16}
+                                                            className="fill-neutral-800"
+                                                        />
+                                                    )
+                                                )}
                                             </div>
 
                                             <div
                                                 className="absolute left-0 top-0 flex overflow-hidden text-yellow-400"
-                                                style={{ width: ratingPercentage }}
+                                                style={{
+                                                    width: ratingPercentage,
+                                                }}
                                             >
-                                                {Array.from({ length: 5 }).map((_, index) => (
-                                                    <Star
-                                                        key={index}
-                                                        size={16}
-                                                        className="shrink-0 fill-yellow-400"
-                                                    />
-                                                ))}
+                                                {Array.from({ length: 5 }).map(
+                                                    (_, index) => (
+                                                        <Star
+                                                            key={index}
+                                                            size={16}
+                                                            className="shrink-0 fill-yellow-400"
+                                                        />
+                                                    )
+                                                )}
                                             </div>
                                         </div>
 
-                                        <span className="text-sm text-neutral-300">{rating}</span>
+                                        <span className="text-sm text-neutral-300">
+                                            {rating}
+                                        </span>
                                     </div>
                                 </div>
 
                                 <div className="h-8 w-px bg-neutral-800" />
 
                                 <div>
-                                    <p className="mb-2 text-xs text-neutral-500">Reviews</p>
+                                    <p className="mb-2 text-xs text-neutral-500">
+                                        Reviews
+                                    </p>
+
                                     <p className="text-base text-neutral-200">
                                         {product.rating?.count} reviews
                                     </p>
@@ -124,6 +164,7 @@ export default async function ProductDetail({ params }: ProductDetailProps) {
                             <p className="mb-10 text-sm leading-7 text-neutral-400">
                                 {product.description}
                             </p>
+
                             <FavoriteButton productId={product.id} />
                         </div>
                     </div>
