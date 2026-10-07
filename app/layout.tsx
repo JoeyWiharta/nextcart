@@ -30,14 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Navbar />
         {children}
         <Footer />
-
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            className: "bg-neutral-900! border-neutral-800! text-white!",
-          }}
-          visibleToasts={1}
-        />
+        <Toaster theme="dark" position="top-right" richColors visibleToasts={1} />
       </body>
     </html>
   );

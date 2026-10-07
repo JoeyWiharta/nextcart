@@ -55,8 +55,8 @@ export default function FavoriteButton({
     <button
       onClick={handleFavorite}
       className={`inline-flex items-center justify-center gap-2 w-fit border px-4 py-2 rounded-md text-sm font-semibold transition-colors duration-300 ${isFavorite
-          ? "border-sky-400 text-sky-400"
-          : "border-neutral-700 text-neutral-300 hover:border-sky-400 hover:text-sky-400"
+        ? "border-sky-400 text-sky-400"
+        : "border-neutral-700 text-neutral-300 hover:border-sky-400 hover:text-sky-400"
         }`}
     >
       <Star
