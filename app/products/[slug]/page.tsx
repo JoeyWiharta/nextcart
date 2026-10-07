@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, Star } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { getProductById, Product } from "@/lib/products";
 import FavoriteButton from "@/app/components/productComponent/FavoriteButton";
 import PageContainer from "@/app/components/layoutComponent/PageContainer";
@@ -15,17 +16,21 @@ export default function ProductDetail() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        async function fetchProduct() {
+        const fetchProduct = async () => {
             try {
                 const data = await getProductById(slug);
                 setProduct(data);
             } catch (error) {
                 console.error("Failed to fetch product:", error);
                 setProduct(null);
+
+                toast.error("Failed to load product", {
+                    description: "Please try again later.",
+                });
             } finally {
                 setLoading(false);
             }
-        }
+        };
 
         fetchProduct();
     }, [slug]);
@@ -61,7 +66,7 @@ export default function ProductDetail() {
     }
 
     const rating = product.rating?.rate ?? 0;
-    const ratingPercentage = `${(rating / 5) * 100}%`;
+    const ratingPercentage = `${(rating / 5) * 100}% `;
 
     return (
         <PageContainer>
