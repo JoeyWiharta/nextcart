@@ -14,27 +14,33 @@ export interface Product {
 }
 
 export async function getProducts(): Promise<Product[]> {
-  try {
-    const res = await fetch("https://fakestoreapi.com/products?limit=5", {
-      cache: "no-store",
-    });
-    if (!res.ok) throw new Error("Failed to fetch products");
-    return await res.json();
-  } catch (error) {
-    console.error("getProducts error:", error);
-    return [];
+  const res = await fetch("https://fakestoreapi.com/products?limit=5", {
+    cache: "no-store",
+  });
+
+  console.log("FakeStore status:", res.status);
+  console.log("FakeStore status text:", res.statusText);
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch products: ${res.status}`);
   }
+
+  return res.json();
 }
 
-export async function getProductById(id: string): Promise<Product | null> {
-  try {
-    const res = await fetch(`https://fakestoreapi.com/products/${id}`, {
-      cache: "no-store",
-    });
-    if (!res.ok) throw new Error("Failed to fetch product");
-    return await res.json();
-  } catch (error) {
-    console.error("getProductById error:", error);
-    return null;
+export async function getProductById(
+  id: string
+): Promise<Product | null> {
+  const res = await fetch(`https://fakestoreapi.com/products/${id}`, {
+    cache: "no-store",
+  });
+
+  console.log("FakeStore detail status:", res.status);
+  console.log("FakeStore detail status text:", res.statusText);
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch product: ${res.status}`);
   }
+
+  return res.json();
 }
