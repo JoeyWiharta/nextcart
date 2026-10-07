@@ -14,6 +14,26 @@ interface ProductDetailProps {
 export default async function ProductDetail({ params }: ProductDetailProps) {
     const { slug } = await params;
     const product = await getProductById(slug);
+
+    if (!product) {
+        return (
+            <PageContainer>
+                <div className="py-24 text-center">
+                    <p className="text-neutral-400 mb-6">
+                        Product not found or failed to load.
+                    </p>
+                    <Link
+                        href="/"
+                        className="inline-flex items-center gap-2 rounded-full border border-neutral-800 py-2 pl-3 pr-4 text-sm text-neutral-400 transition-colors duration-300 hover:border-neutral-700 hover:text-sky-400"
+                    >
+                        <ArrowLeft size={16} />
+                        Back to Products
+                    </Link>
+                </div>
+            </PageContainer>
+        );
+    }
+
     const rating = product.rating?.rate ?? 0;
     const ratingPercentage = `${(rating / 5) * 100}%`;
 
